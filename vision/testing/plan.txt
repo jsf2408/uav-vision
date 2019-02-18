@@ -1,0 +1,13 @@
+for a number of images
+	find chessboardL
+	find chessboardR
+	(draw chessboards)
+
+	if chessboardL & chessboardR
+		cornersL >> imagePoints1
+		cornersR >> imagePoints2
+		object points
+
+stereoCalibrate
+
+
