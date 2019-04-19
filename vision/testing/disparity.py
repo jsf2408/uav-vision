@@ -27,12 +27,20 @@ while(capLeft.isOpened() and capRight.isOpened()):
     # Our operations on the frame com
     # When everything done, release the capture
 
-    stereo = cv2.StereoBM_create(64,7)
-    bm = stereo.compute(imageLeft,imageRight)
+    stereobm = cv2.StereoBM_create(64,7)
+    stereobm.setPreFilterSize(31)
+    stereobm.setPreFilterType(cv2.STEREO_BM_PREFILTER_NORMALIZED_RESPONSE)
+    stereobm.setPreFilterCap(31)
+    stereobm.setTextureThreshold(10)
+    stereobm.setMinDisparity(0)
+    stereobm.setSpeckleWindowSize(10)
+    stereobm.setSpeckleRange(64)
+    stereobm.setUniquenessRatio(10)
+    bm = stereobm.compute(imageLeft,imageRight)
     bm = np.uint8(bm)
 
-    stereo = cv2.StereoSGBM_create(0, 96, 5, 600, 2400, 20, 16, 1, 100, 20, True)
-    sgbm = stereo.compute(imageLeft,imageRight)
+    stereosgbm = cv2.StereoSGBM_create(0, 96, 5, 600, 2400, 20, 16, 1, 100, 20, True)
+    sgbm = stereosgbm.compute(imageLeft,imageRight)
     sgbm = np.uint8(sgbm)
 
     cv2.imshow('Left Image', imageLeft)

@@ -3,6 +3,7 @@ import cv2
 import glob
 from math import sqrt
 
+
 def quickTest(box, size, first, rect):
         delta = 100000
         area  = size[0]*size[1]
