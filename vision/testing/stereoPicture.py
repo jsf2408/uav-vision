@@ -33,13 +33,29 @@ while(capLeft.isOpened() and capRight.isOpened()):
 #	cv2.imshow('left',imageLeft)
 #	cv2.imshow('right',imageRight)
 #	addFrame.write(imageCombined)
-        
+	show = cv2.resize(imageCombined, (1280,480))
 
-	cv2.imshow('combined',imageCombined)
+	cv2.imshow('combined',show)
 
 	if cv2.waitKey(1) & 0xFF == ord('q'):
-            cv2.imwrite(filename, imageCombined)
-	    break
+		cv2.imwrite('720_'+filename, imageCombined)
+		capLeft.set(3,640)
+		capLeft.set(4,480)
+		capRight.set(3,640)
+		capRight.set(4,480)
+		ret, imageLeft  = capLeft.read()
+		ret, imageRight = capRight.read()
+		imageCombined = np.concatenate((imageLeft, imageRight), axis=1)
+		cv2.imwrite('480_'+filename, imageCombined)
+		capLeft.set(3,320)
+		capLeft.set(4,240)
+		capRight.set(3,320)
+		capRight.set(4,240)
+		ret, imageLeft  = capLeft.read()
+		ret, imageRight = capRight.read()
+		imageCombined = np.concatenate((imageLeft, imageRight), axis=1)
+		cv2.imwrite('240_'+filename, imageCombined)
+		break
 
 # When everything done, release the capture
 capLeft.release()
