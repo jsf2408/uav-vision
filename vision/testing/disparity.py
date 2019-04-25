@@ -27,7 +27,7 @@ while(capLeft.isOpened() and capRight.isOpened()):
     # Our operations on the frame com
     # When everything done, release the capture
 
-    stereobm = cv2.StereoBM_create(0,4)
+##    stereobm = cv2.StereoBM_create(0,4)
 ##    stereobm.setPreFilterSize(31)
 ##    stereobm.setPreFilterType(cv2.STEREO_BM_PREFILTER_NORMALIZED_RESPONSE)
 ##    stereobm.setPreFilterCap(31)
@@ -36,10 +36,10 @@ while(capLeft.isOpened() and capRight.isOpened()):
 ##    stereobm.setSpeckleWindowSize(10)
 ##    stereobm.setSpeckleRange(64)
 ##    stereobm.setUniquenessRatio(10)
-    bm = stereobm.compute(imageLeft,imageRight)
-    bm = np.uint8(bm)
+##    bm = stereobm.compute(imageLeft,imageRight)
+##    bm = np.uint8(bm)
 
-    stereosgbm = cv2.StereoSGBM_create(0, 96, 5, 600, 2400, 20, 16, 1, 100, 20, True)
+    stereosgbm = cv2.StereoSGBM_create(0, 80, 5, 600, 2400, 20, 16, 1, 100, 20, False)
     sgbm = stereosgbm.compute(imageLeft,imageRight)
     sgbm = np.uint8(sgbm)
 
