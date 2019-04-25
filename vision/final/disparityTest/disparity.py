@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 #from matplotlib import pyplot as plt
 
-calibration = np.load("testCalibration.npz")
+calibration = np.load("480-30-calibration.npz")
 imageSize = tuple(calibration["imageSize"])
 xMapLeft = calibration["xMapLeft"]
 yMapLeft = calibration["yMapLeft"]
@@ -39,12 +39,12 @@ while(capLeft.isOpened() and capRight.isOpened()):
 ##    bm = stereobm.compute(imageLeft,imageRight)
 ##    bm = np.uint8(bm)
 
-    stereosgbm = cv2.StereoSGBM_create(0, 80, 5, 600, 2400, 20, 16, 1, 100, 20, False)
+    stereosgbm = cv2.StereoSGBM_create(0, 64, 5, 600, 2400, 20, 16, 1, 100, 20, False)
     sgbm = stereosgbm.compute(imageLeft,imageRight)
     sgbm = np.uint8(sgbm)
 
-    cv2.imshow('Left Image', imageLeft)
-    cv2.imshow('BM Disparity Map', bm)
+#    cv2.imshow('Left Image', imageLeft)
+#    cv2.imshow('BM Disparity Map', bm)
     cv2.imshow('SGBM Disparity Map', sgbm)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
