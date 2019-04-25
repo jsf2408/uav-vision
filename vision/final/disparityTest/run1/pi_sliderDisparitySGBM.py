@@ -46,43 +46,43 @@ imageRight0 = imageCombined[:, WIDTH:2*WIDTH]
 
 ##while(1):
     # get current positions of four trackbars
-    minDisparities = 0
-    numDisparities = 32
-    blockSize = 0
-    p1 = 600
-    p2 = 2400
-    disp12MaxDiff = 20
-    preFilterCap = 0
-    uniquenessRatio = 0
-    speckleWindowSize = 0
-    speckleRange = 0
-    doublePass = 0
+minDisparities = 0
+numDisparities = 32
+blockSize = 0
+p1 = 600
+p2 = 2400
+disp12MaxDiff = 20
+preFilterCap = 0
+uniquenessRatio = 0
+speckleWindowSize = 0
+speckleRange = 0
+doublePass = 0
 ##    if (blockSize % 2) == 0:
 ##        blockSize = blockSize +1
 ##    if (prefilterSize % 2) == 0:
 ##        prefilterSize = prefilterSize +1
 
-    stereosgbm = cv2.StereoSGBM_create(minDisparities, numDisparities, \
-                                       blockSize, p1, p2, disp12MaxDiff, \
-                                       preFilterCap, uniquenessRatio, \
-                                       speckleWindowSize, speckleWindowSize, \
-                                       doublePass)
-    time = 0
-    for i in range(10):
-        start = timer()
-        realLeft = cv2.remap(imageLeft0, xMapLeft, yMapLeft, cv2.INTER_LINEAR)
-        realRight = cv2.remap(imageRight0, xMapRight, yMapRight, cv2.INTER_LINEAR)
+stereosgbm = cv2.StereoSGBM_create(minDisparities, numDisparities, \
+                                   blockSize, p1, p2, disp12MaxDiff, \
+                                   preFilterCap, uniquenessRatio, \
+                                   speckleWindowSize, speckleWindowSize, \
+                                   doublePass)
+time = 0
+for i in range(10):
+    start = timer()
+    realLeft = cv2.remap(imageLeft0, xMapLeft, yMapLeft, cv2.INTER_LINEAR)
+    realRight = cv2.remap(imageRight0, xMapRight, yMapRight, cv2.INTER_LINEAR)
 
-        imageLeft = cv2.cvtColor(realLeft, cv2.COLOR_BGR2GRAY)
-        imageRight = cv2.cvtColor(realRight, cv2.COLOR_BGR2GRAY)
-        
-        disparityMap = stereosgbm.compute(imageLeft,imageRight)
-        time = (timer() - start + time)/2
+    imageLeft = cv2.cvtColor(realLeft, cv2.COLOR_BGR2GRAY)
+    imageRight = cv2.cvtColor(realRight, cv2.COLOR_BGR2GRAY)
+    
+    disparityMap = stereosgbm.compute(imageLeft,imageRight)
+    time = (timer() - start + time)/2
 ##    disparityMap = cv2.resize(disparityMap, (320, 240))
 ##    disparityMap = np.uint8(disparityMap)
 ##    
 ##    cv2.imshow('map',disparityMap)
-    print(time)
+print(time)
 ##    k = cv2.waitKey(1) & 0xFF
 ##    if k == 27:
 ##        break
