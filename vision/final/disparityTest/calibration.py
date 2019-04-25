@@ -63,7 +63,7 @@ print("Initialising...")
 # termination criteria
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
-cellSize = 26.85
+cellSize = 26.86
 
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 objp = np.zeros((6*9,3), np.float32)
@@ -74,7 +74,7 @@ objectPoints = [] # 3d point in real world space
 imagePointsLeft = [] # 2d points in image plane.
 imagePointsRight = []
 
-capLeft  = cv2.VideoCapture(1)
+capLeft  = cv2.VideoCapture(0)
 capRight = cv2.VideoCapture(2)
 
 capLeft.set(3,640)
@@ -82,7 +82,7 @@ capLeft.set(4,480)
 capRight.set(3,640)
 capRight.set(4,480)
 
-filename = "480-10-calibration"
+filename = "480-30-calibration"
 
 count = 50
 
@@ -166,6 +166,12 @@ while(capLeft.isOpened() and capRight.isOpened()):
                 print("right", K2, D2)
                 print(R, T, E, F)
 
+                print(K1[0,0])
+
+                f = (K1[0, 0] + K1[1, 1] + K2[0, 0] + K2[1, 1])/4
+
+                print(f)
+
                 alpha = 0
                 flags = cv2.CALIB_ZERO_DISPARITY
                 P1 = None
@@ -186,7 +192,7 @@ while(capLeft.isOpened() and capRight.isOpened()):
                 xMapRight, yMapRight = cv2.initUndistortRectifyMap(K2, D2, R2, P2, imageSize, cv2.CV_32FC1)
 
                 print("Saving calibration...")
-                np.savez_compressed(filename, imageSize=imageSize, xMapLeft=xMapLeft, yMapLeft=yMapLeft, xMapRight=xMapRight, yMapRight=yMapRight)
+                np.savez_compressed(filename, imageSize=imageSize, xMapLeft=xMapLeft, yMapLeft=yMapLeft, xMapRight=xMapRight, yMapRight=yMapRight, focalLength=f)
                 print("Saved.")
                 
                 case = 1
@@ -230,4 +236,3 @@ while(capLeft.isOpened() and capRight.isOpened()):
 capLeft.release()
 capRight.release()
 cv2.destroyAllWindows()
-

@@ -159,6 +159,8 @@ while(capLeft.isOpened() and capRight.isOpened()):
                 print("right", K2, D2)
                 print(R, T, E, F)
 
+                f = (K1[0, 0] + K1[1, 1] + K2[0, 0] + K2[1, 1])/4
+
                 alpha = 0
                 flags = cv2.CALIB_ZERO_DISPARITY
                 P1 = None
@@ -179,7 +181,7 @@ while(capLeft.isOpened() and capRight.isOpened()):
                 xMapRight, yMapRight = cv2.initUndistortRectifyMap(K2, D2, R2, P2, imageSize, cv2.CV_32FC1)
 
                 print("Saving calibration...")
-                np.savez_compressed("testCalibration", imageSize=imageSize, xMapLeft=xMapLeft, yMapLeft=yMapLeft, xMapRight=xMapRight, yMapRight=yMapRight)
+                np.savez_compressed("testCalibration", imageSize=imageSize, xMapLeft=xMapLeft, yMapLeft=yMapLeft, xMapRight=xMapRight, yMapRight=yMapRight, focalLength=f)
                 print("Saved.")
                 
                 case = 1
