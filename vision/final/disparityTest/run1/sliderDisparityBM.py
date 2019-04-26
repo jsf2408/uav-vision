@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from timeit import default_timer as timer
 
 def nothing(x):
     pass
@@ -16,8 +17,8 @@ cv2.namedWindow('image')
 cv2.namedWindow('final')
 cv2.setMouseCallback('final', clickEvent)
 
-imageCombined  = cv2.imread('720_2019-04-23-13-51-37.png')
-calibration = np.load("720-10-calibration.npz")
+imageCombined  = cv2.imread('480_2019-04-23-13-47-42.png')
+calibration = np.load("480-10-calibration.npz")
 imageSize = tuple(calibration["imageSize"])
 xMapLeft = calibration["xMapLeft"]
 yMapLeft = calibration["yMapLeft"]
@@ -37,20 +38,10 @@ cv2.createTrackbar('8','image',0,255,nothing)
 
 WIDTH = imageCombined.shape[1]/2
 
-imageRight = imageCombined[:, 0:WIDTH]
-imageLeft = imageCombined[:, WIDTH:2*WIDTH]
+imageRight0 = imageCombined[:, 0:WIDTH]
+imageLeft0 = imageCombined[:, WIDTH:2*WIDTH]
 
-realLeft = cv2.remap(imageLeft, xMapLeft, yMapLeft, cv2.INTER_LINEAR)
-realRight = cv2.remap(imageRight, xMapRight, yMapRight, cv2.INTER_LINEAR)
 
-imageLeft = cv2.cvtColor(realLeft, cv2.COLOR_BGR2GRAY)
-imageRight = cv2.cvtColor(realRight, cv2.COLOR_BGR2GRAY)
-
-#imageLeft = cv2.GaussianBlur(imageLeft,(11,11),0)
-#imageRight = cv2.GaussianBlur(imageRight,(11,11),0)
-
-imageLeft = cv2.bilateralFilter(imageLeft,9,75,75)
-imageRight = cv2.bilateralFilter(imageRight,9,75,75)
 
 #cv2.imshow('im', imageLeft)
 
@@ -71,19 +62,29 @@ while(1):
     if (prefilterSize % 2) == 0:
         prefilterSize = prefilterSize +1
 
-    stereobm = cv2.StereoBM_create(numDisparities,blockSize)
-    stereobm.setPreFilterSize(prefilterSize)
-    stereobm.setPreFilterType(cv2.STEREO_BM_PREFILTER_NORMALIZED_RESPONSE)
-    stereobm.setPreFilterCap(prefilterCap)
-    stereobm.setTextureThreshold(textureThreshold)
-    stereobm.setSpeckleWindowSize(speckleWindowSize)
-    stereobm.setSpeckleRange(speckleRange)
-    stereobm.setUniquenessRatio(uniquenessRatio)
-    
-    disparityMap = stereobm.compute(imageLeft,imageRight)
+    time = 0
+    for i in range(10):
+        start = timer()
+        stereobm = cv2.StereoBM_create(numDisparities,blockSize)
+        stereobm.setPreFilterSize(prefilterSize)
+        stereobm.setPreFilterType(cv2.STEREO_BM_PREFILTER_NORMALIZED_RESPONSE)
+        stereobm.setPreFilterCap(prefilterCap)
+        stereobm.setTextureThreshold(textureThreshold)
+        stereobm.setSpeckleWindowSize(speckleWindowSize)
+        stereobm.setSpeckleRange(speckleRange)
+        stereobm.setUniquenessRatio(uniquenessRatio)
+
+        realLeft = cv2.remap(imageLeft0, xMapLeft, yMapLeft, cv2.INTER_LINEAR)
+        realRight = cv2.remap(imageRight0, xMapRight, yMapRight, cv2.INTER_LINEAR)
+
+        imageLeft = cv2.cvtColor(realLeft, cv2.COLOR_BGR2GRAY)
+        imageRight = cv2.cvtColor(realRight, cv2.COLOR_BGR2GRAY)
+        disparityMap = stereobm.compute(imageLeft,imageRight)
+        time = (timer() - start + time)/2
+        
 #    disparityMap = cv2.resize(disparityMap, (320, 240))
     disparityMap = np.uint8(disparityMap)
-    
+    print(time)
     cv2.imshow('final',cv2.resize(disparityMap, (640,480)))
     
     k = cv2.waitKey(1) & 0xFF

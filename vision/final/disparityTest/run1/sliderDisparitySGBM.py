@@ -16,7 +16,7 @@ xMapRight = calibration["xMapRight"]
 yMapRight = calibration["yMapRight"]
 
 # create trackbars for color change
-cv2.createTrackbar('1','image',0,10,nothing)
+cv2.createTrackbar('1','image',0,255,nothing)
 cv2.createTrackbar('2','image',0,5,nothing)
 cv2.createTrackbar('3','image',5,20,nothing)
 cv2.createTrackbar('4','image',600,10000,nothing)
