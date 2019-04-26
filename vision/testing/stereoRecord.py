@@ -6,6 +6,11 @@ from datetime import datetime
 capLeft  = cv2.VideoCapture(0)
 capRight = cv2.VideoCapture(1)
 
+capLeft.set(3,640)
+capLeft.set(4,480)
+capRight.set(3,640)
+capRight.set(4,480)
+
 # Define the codec and create VideoWriter object
 WIDTH = int(capLeft.get(cv2.CAP_PROP_FRAME_WIDTH))
 HEIGHT = int(capLeft.get(cv2.CAP_PROP_FRAME_HEIGHT))
