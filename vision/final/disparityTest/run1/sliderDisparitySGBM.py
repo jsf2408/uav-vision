@@ -17,7 +17,7 @@ yMapRight = calibration["yMapRight"]
 
 # create trackbars for color change
 cv2.createTrackbar('1','image',0,255,nothing)
-cv2.createTrackbar('2','image',0,5,nothing)
+cv2.createTrackbar('2','image',1,5,nothing)
 cv2.createTrackbar('3','image',5,20,nothing)
 cv2.createTrackbar('4','image',600,10000,nothing)
 cv2.createTrackbar('5','image',2400,10000,nothing)
@@ -29,6 +29,7 @@ cv2.createTrackbar('10','image',0,255,nothing)
 cv2.createTrackbar('11','image',0,1,nothing)
 
 WIDTH = imageCombined.shape[1]/2
+HEIGHT = imageCombined.shape[0]
 
 imageLeft0 = imageCombined[:, 0:WIDTH]
 imageRight0 = imageCombined[:, WIDTH:2*WIDTH]
@@ -73,6 +74,9 @@ while(1):
         realLeft = cv2.remap(imageLeft0, xMapLeft, yMapLeft, cv2.INTER_LINEAR)
         realRight = cv2.remap(imageRight0, xMapRight, yMapRight, cv2.INTER_LINEAR)
 
+        realLeft = realLeft[:(HEIGHT-10), :]
+        realRight = realRight[10:, :]
+
         imageLeft = cv2.cvtColor(realLeft, cv2.COLOR_BGR2GRAY)
         imageRight = cv2.cvtColor(realRight, cv2.COLOR_BGR2GRAY)
         
@@ -82,6 +86,9 @@ while(1):
     disparityMap = np.uint8(disparityMap)
     
     cv2.imshow('map',disparityMap)
+    cv2.imshow('reall', realLeft)
+    cv2.imshow('realr', realRight)
+
     print(time)
     k = cv2.waitKey(1) & 0xFF
     if k == 27:

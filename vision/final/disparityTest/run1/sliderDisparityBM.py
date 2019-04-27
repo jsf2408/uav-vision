@@ -38,6 +38,8 @@ cv2.createTrackbar('8','image',0,255,nothing)
 
 WIDTH = imageCombined.shape[1]/2
 
+HEIGHT = imageCombined.shape[0]
+
 imageRight0 = imageCombined[:, 0:WIDTH]
 imageLeft0 = imageCombined[:, WIDTH:2*WIDTH]
 
@@ -76,6 +78,9 @@ while(1):
 
         realLeft = cv2.remap(imageLeft0, xMapLeft, yMapLeft, cv2.INTER_LINEAR)
         realRight = cv2.remap(imageRight0, xMapRight, yMapRight, cv2.INTER_LINEAR)
+
+        realLeft = realLeft[:(HEIGHT-10), :]
+        realRight = realRight[10:, :]
 
         imageLeft = cv2.cvtColor(realLeft, cv2.COLOR_BGR2GRAY)
         imageRight = cv2.cvtColor(realRight, cv2.COLOR_BGR2GRAY)
